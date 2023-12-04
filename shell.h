@@ -21,7 +21,7 @@ extern char **environ;
 void print_error(char *name, char *cmd, int idx, char *mssg);
 
 char *_getpath(char *command);
-char *_get_env(char *variable);
+char *_getenv(const char *name);
 int _execute(char **command, char **argv, int idx);
 int is_positive_number(char *str);
 int _atoi(char *str);
@@ -37,7 +37,7 @@ void reverse_string(char *str, int len);
 /****************string.c******************/
 int _strlen(char *s);
 char *_strdup(const char *str);
-int _strcmp(char *s1, char *s2);
+int _strcmp(const char *s1, const char *s2);
 char *_strcat(char *dest, char *src);
 char *_strcpy(char *dest, const char *src);
 
@@ -45,6 +45,6 @@ char *_strcpy(char *dest, const char *src);
 void handle_builtin(char **command, char **argv, int *status, int idx);
 void exit_shell(char **command, char **argv, int *status, int idx);
 void print_env(char **command, int *status);
-int ls_builtin(char *command);
+int is_builtin(char *command);
 
 #endif

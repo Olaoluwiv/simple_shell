@@ -1,3 +1,4 @@
+#include "shell.h"
 /**
  * tokenizer - Tokenize a string into an array of tokens.
  * @line: The input string to tokenize.

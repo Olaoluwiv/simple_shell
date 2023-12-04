@@ -1,17 +1,19 @@
 #include "shell.h"
 
 /**
- * freearray2D - Free a 2D array of strings and its individual elements.
- * @array: The 2D array to free.
+ * free_array2D - Free memory allocated for a 2D array.
+ * @array: The 2D array to be freed.
  */
-void freearray2D(char **array)
+void free_array2D(char **array)
 {
 	int i;
 
 	if (!array)
 		return;
+
 	for (i = 0; array[i]; i++)
 	{
+
 		free(array[i]);
 		array[i] = NULL;
 	}
@@ -20,11 +22,11 @@ void freearray2D(char **array)
 }
 
 /**
- * print_error - Print an error message to standard error.
+ * print_error - Print an error message to STDERR.
  * @name: The name of the program.
- * @cmd: The command that caused the error.
- * @idx: The index of the command in the input.
- * @mssg: A message describing the error.
+ * @cmd: The command causing the error.
+ * @idx: The index of the error.
+ * @mssg: The error message.
  */
 void print_error(char *name, char *cmd, int idx, char *mssg)
 {
@@ -43,9 +45,8 @@ void print_error(char *name, char *cmd, int idx, char *mssg)
 
 /**
  * _itoa - Convert an integer to a string.
- * @n: The integer to convert.
- *
- * Return: A dynamically allocated string representing the integer.
+ * @n: The integer to be converted.
+ * Return: The string representation of the integer.
  */
 char *_itoa(int n)
 {
@@ -66,14 +67,13 @@ char *_itoa(int n)
 	}
 
 	buffer[i] = '\0';
-
 	reverse_string(buffer, i);
 	return (_strdup(buffer));
 }
 
 /**
- * reverse_string - Reverse a string in place.
- * @str: The string to reverse.
+ * reverse_string - Reverse a string.
+ * @str: The string to be reversed.
  * @len: The length of the string.
  */
 void reverse_string(char *str, int len)

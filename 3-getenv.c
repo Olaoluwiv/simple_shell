@@ -1,17 +1,17 @@
 #include "shell.h"
 
 /**
- * _getenv - Get the value of an environmental variable
- * @variable: The name of the environmental variable
+ * _getenv - Get the value of an environmental name
+ * @name: The name of the environmental name
  *
- * Return: The value of the environmental variable or NULL
+ * Return: The value of the environmental name or NULL
  */
-char *_getenv(char *variable)
+char *_getenv(const char *name)
 {
 	char *key, *value, *env;
 	int i;
 
-	if (variable == NULL)
+	if (name == NULL)
 		return (NULL);
 
 	for (i = 0; environ[i]; i++)
@@ -23,7 +23,7 @@ char *_getenv(char *variable)
 
 		key = strtok(tmp, "=");
 
-		if (key != NULL && _strcmp(key, variable) == 0)
+		if (key != NULL && _strcmp(key, name) == 0)
 		{
 			value = strtok(NULL, "\n");
 			env = (value != NULL) ? _strdup(value) : NULL;
