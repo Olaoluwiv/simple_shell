@@ -1,58 +1,60 @@
 #include "shell.h"
 
 /**
- * hsh - main shell loop
- * @info: the parameter & return info struct
- * @av: the argument vector from main()
+ * hsh - Main shell loop.
+ * @name: Pointer to a structure of type 'data_t'
+ * containing potential arguments.
+ * @av: Argument vector from main().
  *
- * Return: 0 on success, 1 on error, or error code
+ * Return: 0 on success, 1 on error, or error code.
  */
-int hsh(info_t *info, char **av)
+int hsh(data_t *name, char **av)
 {
 	ssize_t r = 0;
 	int builtin_ret = 0;
 
 	while (r != -1 && builtin_ret != -2)
 	{
-		clear_info(info);
-		if (interactive(info))
+		clear_data(data);
+		if (interactive(data))
 			_puts("$ ");
 		_eputchar(BUF_FLUSH);
-		r = get_input(info);
+		r = get_input(data);
 		if (r != -1)
 		{
-			set_info(info, av);
-			builtin_ret = find_builtin(info);
+			set_info(data, av);
+			builtin_ret = find_builtin(data);
 			if (builtin_ret == -1)
-				find_cmd(info);
+				find_cmd(data);
 		}
 		else if (interactive(info))
 			_putchar('\n');
-		free_info(info, 0);
+		free_data(data, 0);
 	}
-	write_history(info);
-	free_info(info, 1);
-	if (!interactive(info) && info->status)
-		exit(info->status);
+	write_history(name);
+	free_data(data, 1);
+	if (!interactive(data) && data->status)
+		exit(name->status);
 	if (builtin_ret == -2)
 	{
-		if (info->err_num == -1)
-			exit(info->status);
-		exit(info->err_num);
+		if (data->err_num == -1)
+			exit(data->status);
+		exit(data->err_num);
 	}
 	return (builtin_ret);
 }
 
 /**
- * find_builtin - finds a builtin command
- * @info: the parameter & return info struct
+ * find_builtin - Finds a builtin command.
+ * @data: Pointer to a structure of type 'data_t'
+ * containing potential arguments.
  *
  * Return: -1 if builtin not found,
- *			0 if builtin executed successfully,
- *			1 if builtin found but not successful,
- *			-2 if builtin signals exit()
+ *         0 if builtin executed successfully,
+ *         1 if builtin found but not successful,
+ *         -2 if builtin signals exit().
  */
-int find_builtin(info_t *info)
+int find_builtin(data_t *data)
 {
 	int i, built_in_ret = -1;
 	builtin_table builtintbl[] = {
@@ -68,64 +70,75 @@ int find_builtin(info_t *info)
 	};
 
 	for (i = 0; builtintbl[i].type; i++)
-		if (_strcmp(info->argv[0], builtintbl[i].type) == 0)
+		if (_strcmp(data->argv[0], builtintbl[i].type) == 0)
 		{
-			info->line_count++;
-			built_in_ret = builtintbl[i].func(info);
+			data->line_count++;
+			built_in_ret = builtintbl[i].func(data);
 			break;
 		}
 	return (built_in_ret);
 }
-
 /**
- * find_cmd - finds a command in PATH
- * @info: the parameter & return info struct
+ * find_cmd - Finds a command in PATH.
+ * @name: Pointer to a structure of type 'data_t'
+ *        containing potential arguments.
  *
- * Return: void
+ * This function searches for the command specified in the 'name' structure
+ * within the directories listed in the PATH environment variable. If the
+ * command is found, it forks a new process to execute the command.
+ *
+ * Return: Void.
  */
-void find_cmd(info_t *info)
+void find_cmd(data_t *name)
 {
 	char *path = NULL;
 	int i, k;
 
-	info->path = info->argv[0];
-	if (info->linecount_flag == 1)
+	name->path = name->argv[0];
+	if (name->linecount_flag == 1)
 	{
-		info->line_count++;
-		info->linecount_flag = 0;
+		name->line_count++;
+		name->linecount_flag = 0;
 	}
-	for (i = 0, k = 0; info->arg[i]; i++)
-		if (!is_delim(info->arg[i], " \t\n"))
+	for (i = 0, k = 0; name->arg[i]; i++)
+		if (!is_delim(name->arg[i], " \t\n"))
 			k++;
 	if (!k)
 		return;
 
-	path = find_path(info, _getenv(info, "PATH="), info->argv[0]);
+	path = find_path(name, _getenv(name "PATH="), name->argv[0]);
 	if (path)
 	{
-		info->path = path;
-		fork_cmd(info);
+		name->path = path;
+		fork_cmd(name);
 	}
 	else
 	{
-		if ((interactive(info) || _getenv(info, "PATH=")
-			|| info->argv[0][0] == '/') && is_cmd(info, info->argv[0]))
-			fork_cmd(info);
-		else if (*(info->arg) != '\n')
+		if ((interactive(name) || _getenv(name, "PATH=")
+					|| name->argv[0][0] == '/') && is_cmd(name, name->argv[0]))
 		{
-			info->status = 127;
-			print_error(info, "not found\n");
+			fork_cmd(name);
+		}
+		else if (*(name->arg) != '\n')
+		{
+			name->status = 127;
+			print_error(name, "not found\n");
 		}
 	}
 }
 
 /**
- * fork_cmd - forks a an exec thread to run cmd
- * @info: the parameter & return info struct
+ * fork_cmd - Forks a new process to execute a command.
+ * @name: Pointer to a structure of type 'data_t'
+ *        containing potential arguments.
  *
- * Return: void
+ * This function creates a child process using fork and executes a command in
+ * the child process using execve. It waits for the child process to complete
+ * and updates the status of the 'name' structure accordingly.
+ *
+ * Return: Void.
  */
-void fork_cmd(info_t *info)
+void fork_cmd(data_t *name)
 {
 	pid_t child_pid;
 
@@ -138,9 +151,9 @@ void fork_cmd(info_t *info)
 	}
 	if (child_pid == 0)
 	{
-		if (execve(info->path, info->argv, get_environ(info)) == -1)
+		if (execve(data->path, data->argv, get_environ(data)) == -1)
 		{
-			free_info(info, 1);
+			free_data(data, 1);
 			if (errno == EACCES)
 				exit(126);
 			exit(1);
@@ -152,9 +165,9 @@ void fork_cmd(info_t *info)
 		wait(&(info->status));
 		if (WIFEXITED(info->status))
 		{
-			info->status = WEXITSTATUS(info->status);
-			if (info->status == 126)
-				print_error(info, "Permission denied\n");
+			data->status = WEXITSTATUS(data->status);
+			if (data->status == 126)
+				print_error(data, "Permission denied\n");
 		}
 	}
 }

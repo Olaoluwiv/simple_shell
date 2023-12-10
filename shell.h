@@ -25,6 +25,7 @@ char *_getenv(const char *name);
 int _execute(char **command, char **argv, int idx);
 int is_positive_number(char *str);
 int _atoi(char *str);
+int _myenv(data_t *name)
 
 char  *_itoa(int o);
 

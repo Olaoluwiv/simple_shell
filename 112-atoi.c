@@ -1,21 +1,29 @@
 #include "shell.h"
 
 /**
- * interactive - returns true if shell is interactive mode
- * @info: struct address
+ * interactive - Returns true if the shell is in interactive mode.
+ * @name: Pointer to a data_t struct.
  *
- * Return: 1 if interactive mode, 0 otherwise
+ * This function checks if the shell is in interactive mode by verifying
+ * if the standard input is a terminal and if the read file descriptor is
+ * less than or equal to 2 (common file descriptors for stdin, stdout, stderr).
+ *
+ * Return: 1 if in interactive mode, 0 otherwise.
  */
-int interactive(info_t *info)
+int interactive(data_t *name)
 {
-	return (isatty(STDIN_FILENO) && info.readfd <= 2));
+	return (isatty(STDIN_FILENO) && name->readfd <= 2);
 }
 
 /**
- * is_delim - checks if character is a delimeter
- * @c: the char to check
- * @delim: the delimeter string
- * Return: 1 if true, 0 if false
+ * is_delim - Checks if a character is a delimiter.
+ * @c: The character to check.
+ * @delim: The delimiter string.
+ *
+ * This function iterates through the delimiter string to check if the
+ * given character is a delimiter.
+ *
+ * Return: 1 if the character is a delimiter, 0 otherwise.
  */
 int is_delim(char c, char *delim)
 {
@@ -26,11 +34,13 @@ int is_delim(char c, char *delim)
 }
 
 /**
- * _isalpha - checks for alphabetic character
- * @c: The character to input
- * Return: 1 if c is alphabetic, 0 otherwise
+ * _isalpha - Checks for an alphabetic character.
+ * @c: The character to check.
+ *
+ * This function checks if the given character is an alphabetic character.
+ *
+ * Return: 1 if the character is alphabetic, 0 otherwise.
  */
-
 int _isalpha(int c)
 {
 	if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z'))
@@ -40,11 +50,14 @@ int _isalpha(int c)
 }
 
 /**
- * _atoi - converts a string to an integer
- * @s: the string to be converted
- * Return: 0 if no numbers in string, converted number otherwise
+ * _atoi - Converts a string to an integer.
+ * @s: The string to be converted.
+ *
+ * This function converts a string to an integer, considering sign and
+ * stopping the conversion if a non-digit character is encountered.
+ *
+ * Return: 0 if no numbers in the string, converted number otherwise.
  */
-
 int _atoi(char *s)
 {
 	int i, sign = 1, flag = 0, output;
