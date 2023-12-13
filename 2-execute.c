@@ -1,51 +1,40 @@
 #include "shell.h"
-
 /**
- * _execute - Execute a command process
- * @command: the command to be executed
- * @argv: command argument
- * @idx: index of the command input
- *
- * Description: Executes the command, handles, forks, and waits.
- * Return: The exit status of the command
+ * _execute - Execute a command.
+ * @commnd: An array of command arguments.
+ * @argv: An array of program arguments.
+ * @idx: Index of the command in the input.
+ * Return: The exit status of the command.
  */
-int _execute(char **command, char **argv, int idx)
+
+int _execute(char **commnd, char **argv, int idx)
 {
-	char *full_cmd = _getpath(command[0]);
+	char *full_cmd;
 	pid_t child;
 	int status;
 
+	full_cmd = _getpath(commnd[0]);
+
 	if (!full_cmd)
 	{
-		char *mssg = "Error retrieving the full command path";
-
-		print_error(argv[0], command[0], idx, mssg);
-		free_array2D(command);
+		print_error(argv[0], commnd[0], idx);
+		freearray2D(commnd);
 		return (127);
 	}
-
 	child = fork();
-	if (child == -1)
-	{
-		perror("fork");
-		free(full_cmd);
-		free_array2D(command);
-		return (1);
-	}
-
 	if (child == 0)
 	{
-		if (execve(full_cmd, command, environ) == -1)
+		if (execve(full_cmd, commnd, environ) == -1)
 		{
-			perror("execve");
 			free(full_cmd);
-			free_array2D(command);
-			return (1);
+			freearray2D(commnd);
 		}
 	}
-
-	waitpid(child, &status, 0);
-	free(full_cmd);
-	free_array2D(command);
+	else
+	{
+		waitpid(child, &status, 0);
+		freearray2D(commnd);
+		free(full_cmd), full_cmd = NULL;
+	}
 	return (WEXITSTATUS(status));
 }

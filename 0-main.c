@@ -1,8 +1,8 @@
 #include "shell.h"
 /**
- * main - Entry point for the simple shell
- * @ac: Number of command-line arguments
- * @argv: Array of command-line arguments
+ * main - Entry point for the simple shell.
+ * @ac: Number of command-line arguments.
+ * @argv: Array of command-line arguments.
  * Return: Always returns 0 (success).
  */
 int main(int ac, char **argv)
