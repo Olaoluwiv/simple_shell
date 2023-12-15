@@ -36,7 +36,6 @@ int is_builtin(char *command)
 void exit_shell(char **command, char **argv, int *status, int idx)
 {
 	int exit_value = (*status);
-
 	char *index, mssg[] = ": exit illegal number";
 
 	if (command[1])

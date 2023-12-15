@@ -2,11 +2,11 @@
 
 /**
  * _getenv - Get the value of an environmental name
- * @name: The name of the environmental name
+ * @variable: The name of the environmental variable
  *
  * Return: The value of the environmental name or NULL
  */
-char *_getenv(const char *name)
+char *_getenv(const char *variable)
 {
 	char *tmp, *key, *value, *env;
 	int m;
@@ -15,7 +15,7 @@ char *_getenv(const char *name)
 	{
 		tmp = _strdup(environ[m]);
 		key = strtok(tmp, "=");
-		if (_strcmp(key, name) == 0)
+		if (_strcmp(key, variable) == 0)
 		{
 			value = strtok(NULL, "\n");
 			env = _strdup(value);
