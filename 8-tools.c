@@ -26,11 +26,13 @@ void free_array2D(char **array)
  * @name: The name of the program.
  * @cmd: The command causing the error.
  * @idx: The index of the error.
- * @mssg: The error message.
+ *
  */
-void print_error(char *name, char *cmd, int idx, char *mssg)
+void print_error(char *name, char *cmd, int idx)
 {
 	char *index = _itoa(idx);
+
+	char mssg[] = ": not found\n";
 
 	write(STDERR_FILENO, name, _strlen(name));
 	write(STDERR_FILENO, " :", 2);

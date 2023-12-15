@@ -8,32 +8,21 @@
  */
 char *_getenv(const char *name)
 {
-	char *key, *value, *env;
-	int i;
+	char *tmp, *key, *value, *env;
+	int m;
 
-	if (name == NULL)
-		return (NULL);
-
-	for (i = 0; environ[i]; i++)
+	for (m = 0; environ[m]; m++)
 	{
-		char *tmp = _strdup(environ[i]);
-
-		if (tmp == NULL)
-			return (NULL);
-
+		tmp = _strdup(environ[m]);
 		key = strtok(tmp, "=");
-
-		if (key != NULL && _strcmp(key, name) == 0)
+		if (_strcmp(key, name) == 0)
 		{
 			value = strtok(NULL, "\n");
-			env = (value != NULL) ? _strdup(value) : NULL;
-
+			env = _strdup(value);
 			free(tmp);
 			return (env);
 		}
-
 		free(tmp);
 	}
-
 	return (NULL);
 }

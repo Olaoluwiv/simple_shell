@@ -1,4 +1,5 @@
 #include "shell.h"
+
 /**
  * main - Entry point for the simple shell.
  * @ac: Number of command-line arguments.
@@ -8,7 +9,6 @@
 int main(int ac, char **argv)
 {
 	char *line = NULL, **command = NULL;
-	char *mssg = NULL;
 	int status = 0, idx = 0;
 	(void)ac;
 
@@ -29,6 +29,6 @@ int main(int ac, char **argv)
 		if (is_builtin(command[0]))
 			handle_builtin(command, argv, &status, idx);
 		else
-			status = _execute(command, argv, idx, mssg);
+			status = _execute(command, argv, idx);
 	}
 }

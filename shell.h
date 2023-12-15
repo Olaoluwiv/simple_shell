@@ -22,14 +22,14 @@ extern char **environ;
 
 char *_getpath(char *command);
 char *_getenv(const char *name);
-int _execute(char **command, char **argv, int idx, char *mssg);
+int _execute(char **command, char **argv, int idx);
 int is_positive_number(char *str);
 int _atoi(char *str);
 char  *_itoa(int o);
 
 /**************tools.c*****************/
 void free_array2D(char  **array);
-void print_error(char *name, char *cmd, int idx, char *mssg);
+void print_error(char *name, char *cmd, int idx);
 char *_itoa(int n);
 void reverse_string(char *str, int len);
 

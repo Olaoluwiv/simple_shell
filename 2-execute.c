@@ -6,11 +6,10 @@
  * @command: Array of strings representing the command and its arguments.
  * @argv: Array of strings representing the program's arguments.
  * @idx: Index of the command in the input.
- * @mssg: Error message to be used in case of failure.
  *
  * Return: Exit status of the command execution.
  */
-int _execute(char **command, char **argv, int idx, char *mssg)
+int _execute(char **command, char **argv, int idx)
 {
 	char *full_cmd;
 	pid_t child;
@@ -20,7 +19,7 @@ int _execute(char **command, char **argv, int idx, char *mssg)
 
 	if (!full_cmd)
 	{
-		print_error(argv[0], command[0], idx, mssg);
+		print_error(argv[0], command[0], idx);
 		free_array2D(command);
 		return (127);
 	}
